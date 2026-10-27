@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#05090f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="description" content="Apex Parking 3D — a premium 3D car parking simulator built with Three.js for Android and mobile browsers." />
+  <title>Apex Parking 3D</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/svg+xml" href="assets/icon.svg" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <svg class="svg-sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-camera" viewBox="0 0 24 24">
+        <path d="M4 7.5h3.2l1.4-2h6.8l1.4 2H20a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9.5a2 2 0 0 1 2-2Z"/>
+        <circle cx="12" cy="13" r="3.6"/>
+      </symbol>
+      <symbol id="i-volume" viewBox="0 0 24 24">
+        <path d="M4 9.2h3.3L12 5.1v13.8l-4.7-4.1H4z"/>
+        <path class="icon-wave" d="M15.4 8.4a5.2 5.2 0 0 1 0 7.2M18.2 5.6a9.2 9.2 0 0 1 0 12.8"/>
+      </symbol>
+      <symbol id="i-pause" viewBox="0 0 24 24">
+        <rect x="6" y="4.5" width="4" height="15" rx="1.2"/>
+        <rect x="14" y="4.5" width="4" height="15" rx="1.2"/>
+      </symbol>
+      <symbol id="i-play" viewBox="0 0 24 24">
+        <path d="M8 4.8 20 12 8 19.2z"/>
+      </symbol>
+      <symbol id="i-settings" viewBox="0 0 24 24">
+        <path d="M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6Z"/>
+        <path d="m19.2 13.4 1.4 1.1-1.8 3.1-1.7-.7a7.7 7.7 0 0 1-1.8 1l-.3 1.8h-3.6l-.3-1.8a7.7 7.7 0 0 1-1.8-1l-1.7.7-1.8-3.1 1.4-1.1a7.9 7.9 0 0 1 0-2.8L5.8 9.5l1.8-3.1 1.7.7a7.7 7.7 0 0 1 1.8-1l.3-1.8h3.6l.3 1.8a7.7 7.7 0 0 1 1.8 1l1.7-.7 1.8 3.1-1.4 1.1a7.9 7.9 0 0 1 0 2.8Z"/>
+      </symbol>
+      <symbol id="i-close" viewBox="0 0 24 24">
+        <path d="m6 6 12 12M18 6 6 18"/>
+      </symbol>
+      <symbol id="i-lock" viewBox="0 0 24 24">
+        <rect x="5" y="10" width="14" height="10.5" rx="2"/>
+        <path d="M8.2 10V7.4a3.8 3.8 0 0 1 7.6 0V10"/>
+      </symbol>
+      <symbol id="i-star" viewBox="0 0 24 24">
+        <path d="m12 2.8 2.9 5.9 6.5.9-4.7 4.6 1.1 6.4-5.8-3-5.8 3 1.1-6.4L2.6 9.6l6.5-.9z"/>
+      </symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24">
+        <path d="m9 5 7 7-7 7"/>
+      </symbol>
+      <symbol id="i-clock" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8.5"/>
+        <path d="M12 7.5V12l3.2 2"/>
+      </symbol>
+      <symbol id="i-brake" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8.5"/>
+        <path d="M12 3.5v4M12 16.5v4M3.5 12h4M16.5 12h4"/>
+        <circle cx="12" cy="12" r="2.4"/>
+      </symbol>
+      <symbol id="i-gas" viewBox="0 0 24 24">
+        <path d="M5 20V5.5A1.5 1.5 0 0 1 6.5 4h6A1.5 1.5 0 0 1 14 5.5V20"/>
+        <path d="M3.5 20h12M14 10h3.2a1.8 1.8 0 0 1 1.8 1.8v4.4a1.8 1.8 0 0 0 3.6 0V9.2l-2.6-2.6"/>
+        <path d="M8 8h3.5"/>
+      </symbol>
+      <symbol id="i-arrow-left" viewBox="0 0 24 24">
+        <path d="M19 12H5M11 6l-6 6 6 6"/>
+      </symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24">
+        <path d="M5 12h14M13 6l6 6-6 6"/>
+      </symbol>
+      <symbol id="i-rotate" viewBox="0 0 24 24">
+        <path d="M4 8.5A8.5 8.5 0 0 1 19.5 6M20 3.5V8h-4.5"/>
+        <rect x="8" y="9" width="8" height="12" rx="1.6"/>
+        <path d="M11 12h2"/>
+      </symbol>
+      <symbol id="i-parking" viewBox="0 0 24 24">
+        <path d="M7.5 21V3h5.2a5.2 5.2 0 0 1 0 10.4H7.5"/>
+        <path d="M3 21h6"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <main id="game-shell" aria-label="Apex Parking 3D">
+    <div id="canvas-host" aria-hidden="true"></div>
+    <div class="screen-vignette" aria-hidden="true"></div>
+    <div class="screen-grain" aria-hidden="true"></div>
+    <div id="fx-flash" class="fx-flash" aria-hidden="true"></div>
+
+    <!-- ===================== BOOT ===================== -->
+    <section id="boot-screen" class="boot-screen" aria-label="Loading Apex Parking 3D">
+      <div class="boot-emblem" aria-hidden="true">
+        <span class="boot-ring"></span>
+        <span class="boot-ring boot-ring--two"></span>
+        <span class="boot-letter">P</span>
+      </div>
+      <p class="boot-brand">SKYLINE VALET</p>
+      <h1 class="boot-title">APEX PARKING <span>3D</span></h1>
+      <p id="boot-message" class="boot-message">PREPARING THE DECK</p>
+      <div class="boot-track"><span id="boot-fill"></span></div>
+    </section>
+
+    <!-- ===================== HUD ===================== -->
+    <section id="hud" class="hud" aria-label="Driving dashboard" aria-hidden="true">
+      <header class="hud-top">
+        <div class="mission-hud">
+          <div class="mission-hud-top">
+            <span class="hud-kicker">SHIFT <b id="hud-level">01</b></span>
+            <span class="hud-timer"><svg class="icon icon--tiny"><use href="#i-clock"/></svg><b id="hud-timer">00:00</b></span>
+          </div>
+          <strong id="hud-level-name" class="hud-name">FIRST ARRIVAL</strong>
+          <div class="hud-subline">
+            <span id="hud-difficulty" class="difficulty-tag">EASY</span>
+            <span id="hud-hits"><b>0</b> CONTACTS</span>
+          </div>
+        </div>
+
+        <div id="park-assist" class="park-assist" aria-live="polite">
+          <div class="assist-compass" aria-hidden="true">
+            <svg viewBox="0 0 40 40">
+              <circle cx="20" cy="20" r="17" class="compass-ring"/>
+              <g id="assist-arrow" class="compass-arrow">
+                <path d="M20 5 26 22 20 18.5 14 22Z"/>
+              </g>
+            </svg>
+          </div>
+          <div class="assist-copy">
+            <span class="assist-eyebrow">TARGET BAY <b id="assist-distance">-- M</b></span>
+            <strong id="assist-title">ALIGN WITH THE BAY</strong>
+            <div class="assist-checks">
+              <span id="check-inside"><i></i>IN BAY</span>
+              <span id="check-aligned"><i></i>ALIGNED</span>
+              <span id="check-stopped"><i></i>STOPPED</span>
+            </div>
+          </div>
+          <div id="hold-ring" class="hold-ring" aria-hidden="true">
+            <svg viewBox="0 0 48 48">
+              <circle class="hold-track" cx="24" cy="24" r="19"/>
+              <circle id="hold-arc" class="hold-arc" cx="24" cy="24" r="19"/>
+            </svg>
+            <span>HOLD</span>
+          </div>
+        </div>
+
+        <div class="hud-tools">
+          <button id="camera-button" class="tool-button camera-button" type="button" aria-label="Change camera view">
+            <svg class="icon"><use href="#i-camera"/></svg>
+            <span id="camera-label">CHASE</span>
+          </button>
+          <button id="sound-button" class="icon-button sound-toggle" type="button" aria-label="Mute sound" aria-pressed="false">
+            <svg class="icon"><use href="#i-volume"/></svg>
+            <span class="sound-slash"></span>
+          </button>
+          <button id="pause-button" class="icon-button" type="button" aria-label="Pause shift">
+            <svg class="icon"><use href="#i-pause"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+      <div id="level-start-card" class="level-start-card" aria-hidden="true">
+        <span class="start-kicker">SHIFT <b id="start-level-no">01</b> · <span id="start-difficulty">EASY</span></span>
+        <strong id="start-level-name">FIRST ARRIVAL</strong>
+        <p id="start-level-desc">Pull into the illuminated bay and stop between the lines.</p>
+        <span class="start-line"></span>
+      </div>
+
+      <div class="hud-bottom">
+        <div class="steer-zone">
+          <button id="arrow-left" class="arrow-input" type="button" aria-label="Steer left">
+            <svg class="icon"><use href="#i-arrow-left"/></svg>
+          </button>
+          <div id="steering-wheel" class="steering-wheel" role="slider" tabindex="0" aria-label="Steering wheel. Drag left or right to steer." aria-valuemin="-100" aria-valuemax="100" aria-valuenow="0">
+            <div class="wheel-glow" aria-hidden="true"></div>
+            <div id="wheel-rotor" class="wheel-rotor">
+              <svg class="wheel-art" viewBox="0 0 200 200" aria-hidden="true">
+                <defs>
+                  <linearGradient id="rim-grad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#4c5864"/>
+                    <stop offset="0.22" stop-color="#121820"/>
+                    <stop offset="0.5" stop-color="#2a333d"/>
+                    <stop offset="0.8" stop-color="#0b0f14"/>
+                    <stop offset="1" stop-color="#46525e"/>
+                  </linearGradient>
+                  <linearGradient id="spoke-grad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="#596774"/>
+                    <stop offset="0.45" stop-color="#1d252d"/>
+                    <stop offset="1" stop-color="#0b1015"/>
+                  </linearGradient>
+                  <linearGradient id="cap-grad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#ffd17a"/>
+                    <stop offset="0.55" stop-color="#e59a2c"/>
+                    <stop offset="1" stop-color="#8f5410"/>
+                  </linearGradient>
+                </defs>
+                <circle cx="100" cy="100" r="88" fill="none" stroke="url(#rim-grad)" stroke-width="22"/>
+                <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(255,255,255,.09)" stroke-width="1.4"/>
+                <circle cx="100" cy="100" r="74" fill="none" stroke="rgba(0,0,0,.7)" stroke-width="3"/>
+                <path d="M100 174v-13M22 100h13M165 100h13M100 26v13" stroke="rgba(255,255,255,.28)" stroke-width="3" stroke-linecap="round"/>
+                <g fill="url(#spoke-grad)" stroke="rgba(255,255,255,.08)" stroke-width="1.2">
+                  <path d="M92 108h16l9 48a12 12 0 0 1-10 13h-14a12 12 0 0 1-10-13Z"/>
+                  <path d="M93 94 45 125c-5 3-9-1-7-7l8-16c2-4 6-6 10-7l37-9Z"/>
+                  <path d="m107 94 48 31c5 3 9-1 7-7l-8-16c-2-4-6-6-10-7l-37-9Z"/>
+                </g>
+                <circle cx="100" cy="100" r="30" fill="#0b1117" stroke="#303c47" stroke-width="4"/>
+                <circle cx="100" cy="100" r="21" fill="url(#cap-grad)"/>
+                <path d="M93 92h8.5c4.6 0 7.5 2.6 7.5 6.6 0 4.2-3.1 6.9-7.8 6.9H97v6.5h-4Zm4 4v5.7h4c2.2 0 3.5-1.1 3.5-2.9 0-1.7-1.2-2.8-3.4-2.8Z" fill="#1a1207"/>
+                <path d="M100 68v8" stroke="#ffbd55" stroke-width="3.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <span class="wheel-caption">STEER</span>
+          </div>
+          <button id="arrow-right" class="arrow-input" type="button" aria-label="Steer right">
+            <svg class="icon"><use href="#i-arrow-right"/></svg>
+          </button>
+          <span class="control-caption"><kbd>A</kbd><kbd>D</kbd> STEER</span>
+        </div>
+
+        <div class="speed-zone">
+          <div class="speed-pod" aria-label="Speedometer">
+            <svg class="speed-gauge" viewBox="0 0 126 70" aria-hidden="true">
+              <path class="gauge-track" pathLength="100" d="M 12 62 A 51 51 0 0 1 114 62"/>
+              <path id="speed-arc" class="gauge-fill" pathLength="100" d="M 12 62 A 51 51 0 0 1 114 62"/>
+              <path class="gauge-tick" d="M 16 50 22 54"/>
+              <path class="gauge-tick" d="M 63 11v7"/>
+              <path class="gauge-tick" d="M 110 50 104 54"/>
+            </svg>
+            <div class="speed-readout">
+              <strong id="speed-value">0</strong>
+              <span>KM/H</span>
+            </div>
+          </div>
+          <div class="gear-block">
+            <span class="gear-label">GEAR</span>
+            <div id="gear-selector" class="gear-selector" role="group" aria-label="Gear selector">
+              <button class="gear-button is-active" type="button" data-gear="D" aria-pressed="true" aria-label="Drive gear">D</button>
+              <button class="gear-button" type="button" data-gear="N" aria-pressed="false" aria-label="Neutral gear">N</button>
+              <button class="gear-button" type="button" data-gear="R" aria-pressed="false" aria-label="Reverse gear">R</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="pedal-zone">
+          <button id="brake-pedal" class="pedal pedal--brake" type="button" aria-label="Brake. Hold to slow down.">
+            <span class="pedal-icon"><svg class="icon"><use href="#i-brake"/></svg></span>
+            <span class="pedal-label">BRAKE</span>
+          </button>
+          <button id="gas-pedal" class="pedal pedal--gas" type="button" aria-label="Accelerator. Hold to drive.">
+            <span class="pedal-icon"><svg class="icon"><use href="#i-gas"/></svg></span>
+            <span class="pedal-label">GAS</span>
+          </button>
+          <span class="control-caption"><kbd>W</kbd><kbd>S</kbd> THROTTLE</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== MAIN MENU ===================== -->
+    <section id="main-menu" class="screen menu-screen" aria-label="Main menu">
+      <header class="menu-topbar">
+        <div class="brand-lockup">
+          <span class="brand-mark"><svg class="icon"><use href="#i-parking"/></svg></span>
+          <span class="brand-text">APEX PARKING<small>3D · SKYLINE VALET</small></span>
+        </div>
+        <div class="menu-top-actions">
+          <button id="menu-sound" class="icon-button sound-toggle" type="button" aria-label="Mute sound" aria-pressed="false">
+            <svg class="icon"><use href="#i-volume"/></svg>
+            <span class="sound-slash"></span>
+          </button>
+          <button id="menu-settings" class="icon-button" type="button" aria-label="Open settings">
+            <svg class="icon"><use href="#i-settings"/></svg>
+          </button>
+        </div>
+      </header>
+
+      <div class="menu-main">
+        <div class="menu-hero">
+          <p class="hero-kicker"><span class="kicker-dot"></span> SKYLINE VALET · NIGHT SHIFT</p>
+          <h1 class="menu-title">
+            <span class="menu-title-line">APEX</span>
+            <span class="menu-title-line menu-title-line--accent">PARKING<sup>3D</sup></span>
+          </h1>
+          <p class="menu-tagline">Precision has a parking space.<br />Slide into the city's finest bays.</p>
+
+          <div class="menu-actions">
+            <button id="play-button" class="btn btn-primary" type="button">
+              <span class="btn-shine" aria-hidden="true"></span>
+              <span class="btn-icon"><svg class="icon"><use href="#i-play"/></svg></span>
+              <span class="btn-copy"><strong>START SHIFT</strong><small>CONTINUE YOUR CAREER</small></span>
+              <span class="btn-arrow"><svg class="icon"><use href="#i-chevron"/></svg></span>
+            </button>
+            <button id="levels-button" class="btn btn-secondary" type="button">
+              <span class="btn-icon"><svg class="icon"><use href="#i-parking"/></svg></span>
+              <span class="btn-copy"><strong>MISSIONS</strong><small>CHOOSE A BAY</small></span>
+            </button>
+          </div>
+
+          <div class="menu-progress">
+            <div class="menu-progress-head">
+              <span>SHIFT PROGRESS</span>
+              <strong id="menu-progress-label">0 / 8</strong>
+            </div>
+            <div class="progress-track"><span id="menu-progress-fill"></span></div>
+            <div class="menu-records">
+              <span><b id="menu-stars">0</b> STARS EARNED</span>
+              <span>FASTEST PARK <b id="menu-best-time">--:--</b></span>
+            </div>
+          </div>
+
+          <div class="menu-hints" aria-label="Controls">
+            <span><i class="hint-wheel"></i> DRAG WHEEL</span>
+            <span><i class="hint-pedal"></i> HOLD GAS</span>
+            <span><i class="hint-gear"></i> D / N / R</span>
+          </div>
+        </div>
+
+        <aside class="menu-mission-card">
+          <div class="mission-card-head">
+            <span>UP NEXT</span>
+            <b id="menu-mission-no">01</b>
+          </div>
+          <div class="mission-bay-art" aria-hidden="true">
+            <span class="bay-corner bay-corner--tl"></span>
+            <span class="bay-corner bay-corner--tr"></span>
+            <span class="bay-corner bay-corner--bl"></span>
+            <span class="bay-corner bay-corner--br"></span>
+            <span class="bay-car"></span>
+            <span class="bay-label" id="menu-target-code">BAY A-04</span>
+          </div>
+          <h2 id="menu-mission-name">FIRST ARRIVAL</h2>
+          <p id="menu-mission-desc">Pull into the illuminated bay and stop cleanly between the lines.</p>
+          <div class="mission-card-meta">
+            <div>
+              <span>DIFFICULTY</span>
+              <div id="menu-difficulty" class="difficulty-pips"><i></i><i></i><i></i></div>
+            </div>
+            <div>
+              <span>PAR TIME</span>
+              <strong id="menu-par-time">0:35</strong>
+            </div>
+          </div>
+          <div class="mission-tip">
+            <span class="tip-mark">!</span>
+            <p id="menu-mission-tip">The wheel returns to centre automatically. Feather the throttle for a clean entry.</p>
+          </div>
+        </aside>
+      </div>
+
+      <footer class="menu-footer">
+        <span>THREE.JS · 60 FPS · MOBILE READY</span>
+        <span class="footer-mark">APEX / 01</span>
+      </footer>
+    </section>
+
+    <!-- ===================== PAUSE ===================== -->
+    <section id="pause-screen" class="screen modal-screen" aria-label="Shift paused" aria-hidden="true">
+      <div class="modal-shell">
+        <div class="modal-topline">
+          <span class="modal-kicker">SHIFT SUSPENDED</span>
+          <button id="pause-close" class="icon-button" type="button" aria-label="Resume shift">
+            <svg class="icon"><use href="#i-close"/></svg>
+          </button>
+        </div>
+        <h2 class="modal-title">TAKE A BREATH<span>.</span></h2>
+        <p class="modal-copy">The engine is idling. Your perfect line can wait.</p>
+        <div class="pause-stats">
+          <div><span>MISSION</span><strong id="pause-level-name">FIRST ARRIVAL</strong></div>
+          <div><span>ELAPSED</span><strong id="pause-time">00:00</strong></div>
+          <div><span>CONTACTS</span><strong id="pause-hits">0</strong></div>
+        </div>
+        <div class="modal-actions">
+          <button id="resume-button" class="btn btn-primary btn-wide" type="button">
+            <span class="btn-icon"><svg class="icon"><use href="#i-play"/></svg></span>
+            <span class="btn-copy"><strong>RESUME SHIFT</strong><small>BACK TO THE BAY</small></span>
+          </button>
+          <div class="modal-row">
+            <button id="restart-pause" class="btn btn-secondary" type="button">RESTART</button>
+            <button id="settings-pause" class="btn btn-secondary" type="button">SETTINGS</button>
+          </div>
+          <button id="menu-pause" class="btn btn-quiet" type="button">QUIT TO MAIN MENU</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SETTINGS ===================== -->
+    <section id="settings-screen" class="screen modal-screen" aria-label="Settings" aria-hidden="true">
+      <div class="modal-shell modal-shell--settings">
+        <div class="modal-topline">
+          <span class="modal-kicker">GARAGE SETUP</span>
+          <button id="settings-close" class="icon-button" type="button" aria-label="Close settings">
+            <svg class="icon"><use href="#i-close"/></svg>
+          </button>
+        </div>
+        <h2 class="modal-title">SETTINGS<span>.</span></h2>
+        <div class="settings-list">
+          <div class="setting-row">
+            <div class="setting-copy"><strong>SOUND</strong><span>Engine, tyres and parking chimes</span></div>
+            <button id="sound-setting" class="switch" type="button" role="switch" aria-checked="true" aria-label="Sound"><span></span></button>
+          </div>
+          <div class="setting-row">
+            <div class="setting-copy"><strong>STEERING ARROWS</strong><span>Show left and right touch buttons</span></div>
+            <button id="arrows-setting" class="switch" type="button" role="switch" aria-checked="false" aria-label="Steering arrow buttons"><span></span></button>
+          </div>
+          <div class="setting-row">
+            <div class="setting-copy"><strong>CAMERA SHAKE</strong><span>Impact feedback on collisions</span></div>
+            <button id="shake-setting" class="switch" type="button" role="switch" aria-checked="true" aria-label="Camera shake"><span></span></button>
+          </div>
+          <div class="setting-row setting-row--stack">
+            <div class="setting-copy"><strong>STEERING SENSITIVITY</strong><span>How quickly the wheel answers your thumb</span></div>
+            <div class="range-wrap">
+              <input id="sens-range" class="range" type="range" min="60" max="140" step="5" value="100" aria-label="Steering sensitivity" />
+              <b id="sens-value">100%</b>
+            </div>
+          </div>
+          <div class="setting-row setting-row--stack">
+            <div class="setting-copy"><strong>GRAPHICS</strong><span>Choose detail for your device</span></div>
+            <div class="segmented" id="quality-control" role="group" aria-label="Graphics quality">
+              <button type="button" data-quality="auto" class="is-active">AUTO</button>
+              <button type="button" data-quality="high">HIGH</button>
+              <button type="button" data-quality="performance">FAST</button>
+            </div>
+          </div>
+        </div>
+        <button id="settings-done" class="btn btn-primary btn-wide" type="button">DONE</button>
+      </div>
+    </section>
+
+    <!-- ===================== LEVEL SELECT ===================== -->
+    <section id="levels-screen" class="screen modal-screen screen--levels" aria-label="Mission selection" aria-hidden="true">
+      <div class="levels-shell">
+        <div class="modal-topline">
+          <span class="modal-kicker">VALET CAREER</span>
+          <button id="levels-close" class="icon-button" type="button" aria-label="Close mission grid">
+            <svg class="icon"><use href="#i-close"/></svg>
+          </button>
+        </div>
+        <div class="levels-heading">
+          <div>
+            <h2 class="modal-title">MISSION GRID<span>.</span></h2>
+            <p class="modal-copy">Every bay tells a story. Earn stars for a clean, quick park.</p>
+          </div>
+          <div class="levels-tally">
+            <span>STARS</span>
+            <strong id="levels-total-stars">0 / 24</strong>
+          </div>
+        </div>
+        <div id="level-grid" class="level-grid"><!-- generated --></div>
+        <div class="levels-actions">
+          <button id="levels-back" class="btn btn-secondary" type="button">BACK</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== LEVEL COMPLETE ===================== -->
+    <section id="complete-screen" class="screen modal-screen screen--complete" aria-label="Shift complete" aria-hidden="true">
+      <div class="complete-shell">
+        <div class="complete-halo" aria-hidden="true"></div>
+        <span class="modal-kicker">SHIFT COMPLETE</span>
+        <div class="complete-stars" id="complete-stars" aria-label="Stars earned">
+          <span class="star"><svg class="icon"><use href="#i-star"/></svg></span>
+          <span class="star"><svg class="icon"><use href="#i-star"/></svg></span>
+          <span class="star"><svg class="icon"><use href="#i-star"/></svg></span>
+        </div>
+        <h2 id="complete-title" class="complete-title">PERFECT PARK.</h2>
+        <p id="complete-sub" class="complete-sub">Not a scratch. Not a wobble. The valet captain is impressed.</p>
+
+        <div class="complete-stats">
+          <div><span>PARK TIME</span><strong id="complete-time">00:00</strong></div>
+          <div><span>CONTACTS</span><strong id="complete-hits">0</strong></div>
+          <div><span>SHIFT SCORE</span><strong id="complete-score">3,000</strong></div>
+        </div>
+
+        <div class="complete-reward">
+          <div class="reward-copy">
+            <span>BAY AWARD</span>
+            <strong id="complete-award">+2,500</strong>
+          </div>
+          <div class="reward-stars"><b id="complete-star-count">3</b> / 3 STARS</div>
+        </div>
+
+        <div class="complete-actions">
+          <button id="next-level" class="btn btn-primary btn-wide" type="button">
+            <span class="btn-icon"><svg class="icon"><use href="#i-play"/></svg></span>
+            <span class="btn-copy"><strong>NEXT MISSION</strong><small>KEEP THE SHIFT MOVING</small></span>
+          </button>
+          <div class="modal-row">
+            <button id="retry-button" class="btn btn-secondary" type="button">RESTART</button>
+            <button id="complete-levels" class="btn btn-secondary" type="button">MISSIONS</button>
+            <button id="complete-menu" class="btn btn-quiet" type="button">MENU</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div id="rotate-note" class="rotate-note" aria-hidden="true">
+      <svg class="icon"><use href="#i-rotate"/></svg>
+      <span>ROTATE FOR THE FULL COCKPIT VIEW</span>
+    </div>
+
+    <pre id="selftest-results" class="selftest-results" hidden></pre>
+  </main>
+
+  <script src="vendor/three.min.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
